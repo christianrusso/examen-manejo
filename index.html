@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Práctica - Licencia de Conducir</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f6f8; }
+        h1 { color: #2c3e50; text-align: center; }
+        .pregunta { 
+            background: #ffffff; 
+            padding: 15px; 
+            margin-bottom: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .pregunta p { color: #34495e; }
+        .respuesta { margin-left: 20px; display: block; margin-top: 5px; }
+        .correcta { color: green; font-weight: bold; }
+        .incorrecta { color: red; font-weight: bold; }
+        button { 
+            margin-top: 20px; 
+            padding: 10px 20px; 
+            background-color: #3498db; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        button:hover { background-color: #2980b9; }
+    </style>
+</head>
+<body>
+
+<h1>Examen de Práctica - Licencia de Conducir</h1>
+
+<form id="examen">
+
+<!-- Preguntas -->
+<script>
+const preguntas = [
+  { p: "¿Qué factores forman la Trilogía Vial?", opciones: ["Humanos, económicos y climáticos", "Humanos, vehiculares y ambientales", "Urbanos, rurales y ambientales", "Naturales, políticos y sociales"], r: "b" },
+  { p: "¿Cuál es el factor más responsable de los siniestros viales?", opciones: ["Vehicular", "Ambiental", "Humano", "Climático"], r: "c" },
+  { p: "¿Qué es un siniestro vial?", opciones: ["Un hecho inevitable", "Un hecho prevenible y multicausal", "Una catástrofe natural", "Una falla mecánica"], r: "b" },
+  { p: "¿Qué debe revisarse antes de circular?", opciones: ["Sólo los neumáticos", "Sólo la batería", "El estado del conductor y del vehículo", "Nada"], r: "c" },
+  { p: "¿Qué dispositivo evita el efecto latigazo?", opciones: ["Airbag", "Apoyacabezas", "Cinturón de seguridad", "ABS"], r: "b" },
+  { p: "¿Qué es la Seguridad Vial?", opciones: ["El respeto solo a las señales", "La prevención de siniestros o minimización de sus efectos", "El uso del cinturón de seguridad", "La revisión de neumáticos"], r: "b" },
+  { p: "¿Qué es el factor vehicular?", opciones: ["El estado del conductor", "Condiciones del camino", "Condiciones técnicas del vehículo", "Condiciones climáticas"], r: "c" },
+  { p: "¿Qué es el factor ambiental?", opciones: ["El estado del vehículo", "Fenómenos climáticos y estado de la vía", "La velocidad del tránsito", "La calidad del combustible"], r: "b" },
+  { p: "¿Qué es el factor humano?", opciones: ["Solo la velocidad de reacción", "Conductas, emociones, distracciones y estado físico del conductor", "El clima", "El estado del motor"], r: "b" },
+  { p: "¿Qué significa espacio público?", opciones: ["Lugar privado de acceso restringido", "Lugar donde todos tenemos derecho a circular", "Propiedad privada", "Calles internas"], r: "b" },
+
+  { p: "¿Cuál es la presión correcta de los neumáticos?", opciones: ["La máxima posible", "La que indica el manual del vehículo", "La mínima para ahorrar combustible", "Depende del clima"], r: "b" },
+  { p: "¿Qué puede provocar un neumático desgastado?", opciones: ["Más adherencia", "Aquaplaning", "Mayor estabilidad", "Mejor frenado"], r: "b" },
+  { p: "¿Qué debe contener siempre el vehículo?", opciones: ["Sistema de climatización", "Kit de audio", "Balizas portátiles y matafuego", "Turbo"], r: "c" },
+  { p: "¿Cuál es la profundidad mínima del dibujo del neumático para circular?", opciones: ["0,5 mm", "1,6 mm", "2 mm", "5 mm"], r: "b" },
+  { p: "¿Qué tipo de balizas deben tener los vehículos?", opciones: ["Rectangulares rojas", "Triangulares retrorreflectivas", "Circulares anaranjadas", "Cuadradas azules"], r: "b" },
+  { p: "¿Qué significa conducir de manera defensiva?", opciones: ["Ignorar normas si no hay tránsito", "Prever errores de los demás", "Confiar totalmente en el resto", "Circular solo de día"], r: "b" },
+  { p: "¿Qué comportamiento es correcto ante la presencia de peatones?", opciones: ["Priorizar siempre al peatón", "Acelerar para evitar frenar", "Ignorar si hay apuro", "Pasar primero si es en esquina"], r: "a" },
+  { p: "¿Qué sistema permite frenar sin bloquear las ruedas?", opciones: ["Dirección asistida", "ABS", "Suspensión hidráulica", "Sistema de tracción"], r: "b" },
+  { p: "¿Qué es la conducción dirigida?", opciones: ["No prestar atención", "Dominar el vehículo en todo momento", "Confiar en la buena suerte", "Circular sin cinturón"], r: "b" },
+  { p: "¿Qué acción está prohibida al conducir?", opciones: ["Ajustar el retrovisor", "Llevar bultos entre los brazos", "Colocar el cinturón de seguridad", "Controlar el nivel de combustible"], r: "b" },
+
+  { p: "¿Qué medida de seguridad tiene el matafuego?", opciones: ["Debe ser decorativo", "Debe ser fijado y fácil de extraer", "Puede estar suelto", "Debe ir en el baúl"], r: "b" },
+  { p: "¿Qué elemento ayuda a proteger las piernas del conductor en una colisión?", opciones: ["Volante con absorción", "Pedalera colapsable", "Apoyacabezas", "Airbag lateral"], r: "b" },
+  { p: "¿Qué parte de la motocicleta aloja el sistema de dirección?", opciones: ["Cuadro", "Horquilla", "Basculante", "Pipa de dirección"], r: "d" },
+  { p: "¿Qué vehículos no pueden circular por autopistas?", opciones: ["Motocicletas", "Bicicletas y ciclomotores", "Autos particulares", "Camiones"], r: "b" },
+  { p: "¿Qué indica el testigo de desgaste del neumático?", opciones: ["Buen estado", "Que se debe cambiar", "Exceso de presión", "Desgaste por fricción"], r: "b" },
+  { p: "¿Qué debe hacer un motociclista para ser más visible?", opciones: ["Circular apagando luces", "Usar ropa clara y chaleco reflectante", "Circular solo de día", "No utilizar casco"], r: "b" },
+  { p: "¿Qué define una colisión como siniestro y no como accidente?", opciones: ["Que fue inevitable", "Que fue prevenible", "Que fue causada por el clima", "Que involucra más de dos vehículos"], r: "b" },
+  { p: "¿Cuál es el objetivo de los apoyacabezas?", opciones: ["Amortiguar golpes laterales", "Evitar lesiones cervicales", "Mejorar la estética", "Absorber impacto frontal"], r: "b" },
+  { p: "¿Qué se busca con el uso de cinturón de seguridad y airbag?", opciones: ["Reducir daños en choques", "Evitar multas", "Reducir consumo de combustible", "Aumentar velocidad"], r: "a" },
+  { p: "¿Qué pasa si se circula con neumáticos muy gastados?", opciones: ["Aumenta el consumo", "Mayor riesgo de aquaplaning", "Más estabilidad", "Mejor frenado"], r: "b" },
+  { p: "¿Cuál es el sistema que disminuye la fuerza del impacto en un choque frontal?", opciones: ["Columna de dirección rígida", "Chasis de deformación programada", "Cristales duros", "Airbags de ventana"], r: "b" },
+  { p: "¿Qué función cumple el sistema de suspensión?", opciones: ["Aumentar la velocidad", "Absorber las irregularidades del terreno", "Frenar el vehículo", "Bajar el consumo de combustible"], r: "b" },
+{ p: "¿Qué documento demuestra la titularidad del vehículo?", opciones: ["Licencia de conducir", "Cédula verde", "Título de propiedad", "Seguro obligatorio"], r: "c" },
+{ p: "¿Qué elementos de seguridad son obligatorios en un auto?", opciones: ["Cinturones de seguridad, balizas, matafuego", "Radio AM/FM", "Sistema de climatización", "Faros de xenón"], r: "a" },
+{ p: "¿Qué es el 'aquaplaning'?", opciones: ["Desgaste de frenos", "Pérdida de adherencia por agua", "Mejor tracción", "Falla del motor"], r: "b" },
+{ p: "¿Qué luz debe usarse de noche en calles iluminadas?", opciones: ["Altas", "Bajas", "Posición", "Intermitentes"], r: "b" },
+{ p: "¿Qué efecto tiene la velocidad en una frenada?", opciones: ["Disminuye la distancia de detención", "Aumenta la distancia de detención", "No afecta la frenada", "La mejora"], r: "b" },
+{ p: "¿Qué indica una línea amarilla continua en el borde de la calzada?", opciones: ["Prohibido estacionar", "Zona de sobrepaso", "Estacionamiento permitido", "Prioridad de paso"], r: "a" },
+{ p: "¿Qué significa un semáforo con luz amarilla intermitente?", opciones: ["Detenerse obligatoriamente", "Avanzar con precaución", "Avanzar rápidamente", "Prohibido girar"], r: "b" },
+{ p: "¿Qué significa una señal de tránsito triangular con borde rojo?", opciones: ["Información", "Advertencia", "Prohibición", "Obligación"], r: "b" },
+{ p: "¿Qué indica una luz roja intermitente?", opciones: ["Precaución", "Ceda el paso", "Detención obligatoria", "Paso permitido"], r: "c" },
+{ p: "¿Qué sanción corresponde por circular sin licencia de conducir?", opciones: ["Advertencia", "Multa y retención del vehículo", "Permiso de 24 horas", "Suspensión leve"], r: "b" },
+{ p: "¿Qué documentación se requiere para conducir un vehículo?", opciones: ["Sólo licencia", "Licencia, cédula, seguro obligatorio", "Sólo título del automotor", "Sólo cédula azul"], r: "b" },
+{ p: "¿Qué es la visibilidad de 360°?", opciones: ["Ver hacia adelante solamente", "Ver hacia todos los ángulos", "Ver solo hacia atrás", "Ver solo hacia un costado"], r: "b" },
+{ p: "¿Qué acción es peligrosa al conducir?", opciones: ["Circular a velocidad prudente", "Usar celular", "Usar cinturón de seguridad", "Mantener distancia de frenado"], r: "b" },
+{ p: "¿Qué efecto tiene el alcohol en la conducción?", opciones: ["Aumenta los reflejos", "Reduce los reflejos y el juicio", "No afecta si es poco", "Mejora la visión nocturna"], r: "b" },
+
+{ p: "¿Qué indica una señal de PARE?", opciones: ["Avance sin detenerse", "Detenerse completamente", "Precaución", "Sólo reducir velocidad"], r: "b" },
+{ p: "¿Qué significa una línea blanca discontinua?", opciones: ["Prohibido cambiar de carril", "Puede cambiarse de carril con precaución", "Obligación de giro", "Prohibido estacionar"], r: "b" },
+{ p: "¿Qué debe hacerse al aproximarse a una bocacalle sin semáforo?", opciones: ["Aumentar la velocidad", "Disminuir la velocidad y estar preparado para detenerse", "Girar en U", "Estacionar"], r: "b" },
+{ p: "¿Qué vehículos deben circular con luces bajas encendidas permanentemente?", opciones: ["Sólo motos", "Todos los vehículos", "Sólo camiones", "Sólo autos particulares"], r: "b" },
+{ p: "¿Qué significa un cartel de fondo azul con una flecha blanca?", opciones: ["Prohibición", "Información", "Obligación", "Advertencia"], r: "c" },
+{ p: "¿Qué distancia mínima debe mantenerse respecto al vehículo de adelante?", opciones: ["Una distancia prudente", "Una distancia corta", "Una distancia fija de 10 metros", "No importa"], r: "a" },
+{ p: "¿Qué hacer si otro vehículo intenta sobrepasarnos?", opciones: ["Aumentar la velocidad", "Facilitar la maniobra", "Cerrar el paso", "Ignorarlo"], r: "b" },
+{ p: "¿Qué indica una señal de curva peligrosa?", opciones: ["Prioridad de paso", "Reducir velocidad", "Prohibido girar", "Estacionamiento permitido"], r: "b" },
+{ p: "¿Qué acción reduce el riesgo de choque en una rotonda?", opciones: ["Circular por el centro", "Ceder el paso a quienes ya circulan", "Pasar primero siempre", "Tocar bocina"], r: "b" },
+{ p: "¿Qué significa un cartel de STOP?", opciones: ["Reducir velocidad", "Detenerse obligatoriamente", "Ceder el paso", "Prohibido estacionar"], r: "b" },
+
+{ p: "¿Qué documento acredita el seguro obligatorio?", opciones: ["Cédula verde", "Licencia de conducir", "Póliza o comprobante", "Título del automotor"], r: "c" },
+{ p: "¿Qué maniobra está prohibida en autopistas?", opciones: ["Circular por la derecha", "Marcha atrás", "Adelantar por la izquierda", "Circular con luces bajas"], r: "b" },
+{ p: "¿Qué acción debe realizarse en presencia de escolares cruzando?", opciones: ["Acelerar", "Reducir la velocidad y detenerse si es necesario", "Circular en zigzag", "Tocar bocina"], r: "b" },
+{ p: "¿Qué es la zona de frenado?", opciones: ["Zona de aceleración", "Área de detención segura", "Área de sobrepaso", "Área de descanso"], r: "b" },
+{ p: "¿Qué significa una señal circular de borde rojo?", opciones: ["Información", "Obligación", "Prohibición", "Advertencia"], r: "c" },
+{ p: "¿Qué hacer si se pincha un neumático en movimiento?", opciones: ["Frenar bruscamente", "Sujetar firmemente el volante y frenar progresivamente", "Acelerar", "Bajar la velocidad en curva"], r: "b" },
+{ p: "¿Qué indica una doble línea amarilla continua?", opciones: ["Permitido girar", "Prohibido sobrepasar", "Precaución", "Giro obligatorio"], r: "b" },
+{ p: "¿Qué acción reduce el riesgo de choque en niebla densa?", opciones: ["Circular con luces altas", "Reducir velocidad y usar luces bajas", "Circular con balizas apagadas", "Circular de noche"], r: "b" },
+{ p: "¿Qué conducta es correcta en cruces ferroviarios?", opciones: ["Detenerse si hay señal sonora", "Pasar rápido sin detenerse", "Pasar igual si no hay barrera", "Ignorar la luz roja"], r: "a" },
+{ p: "¿Qué significa una señal azul con P blanca?", opciones: ["Prioridad de paso", "Estacionamiento permitido", "Prohibido estacionar", "Carga y descarga"], r: "b" },
+{ p: "¿Qué distancia mínima debe dejarse al adelantar a un ciclista?", opciones: ["0,5 metros", "1,5 metros", "2 metros", "5 metros"], r: "b" },
+{ p: "¿Qué indica una señal de curva en S?", opciones: ["Curva muy cerrada", "Curvas sucesivas", "Fin de zona de curvas", "Curva de 90 grados"], r: "b" },
+{ p: "¿Qué efecto produce una frenada brusca sin ABS?", opciones: ["Mayor control", "Bloqueo de ruedas", "Disminución del tiempo de frenado", "Mayor estabilidad"], r: "b" },
+{ p: "¿Qué debe hacerse antes de iniciar una maniobra de giro?", opciones: ["Girar inmediatamente", "Señalizar con suficiente antelación", "Reducir la velocidad de golpe", "Tocar bocina"], r: "b" },
+{ p: "¿Qué se debe verificar antes de adelantar?", opciones: ["Solo si no viene nadie de frente", "Que haya espacio suficiente y visibilidad adecuada", "Que haya camiones", "Que haya semáforo"], r: "b" },
+{ p: "¿Qué indica una luz verde en el semáforo?", opciones: ["Prohibición de paso", "Precaución", "Avanzar si la vía está libre", "Detención obligatoria"], r: "c" },
+{ p: "¿Qué velocidad máxima se permite en calles urbanas, salvo señalización?", opciones: ["30 km/h", "40 km/h", "60 km/h", "80 km/h"], r: "c" },
+{ p: "¿Qué significa un cartel que indica 'Ceda el Paso'?", opciones: ["Prioridad de paso", "Avance libre", "Detención obligatoria", "Prohibición de paso"], r: "a" },
+{ p: "¿Qué elemento debe funcionar correctamente para garantizar una buena visión nocturna?", opciones: ["Sistema de frenos", "Sistema de luces", "Sistema de escape", "Sistema de climatización"], r: "b" },
+{ p: "¿Qué hacer si falla el sistema de frenos en movimiento?", opciones: ["Apagar el motor", "Accionar el freno de mano suavemente", "Frenar bruscamente", "Acelerar para estabilizar"], r: "b" },
+
+{ p: "¿Qué precaución debe tenerse al pasar cerca de un colegio?", opciones: ["Acelerar", "Reducir la velocidad", "Tocar bocina", "Ignorar las señales"], r: "b" },
+{ p: "¿Qué dispositivo permite mantener el control en frenadas de emergencia?", opciones: ["ESP", "ABS", "EBD", "ASR"], r: "b" },
+{ p: "¿Qué indica una señal de 'Zona de Obras'?", opciones: ["Disminuir la velocidad", "Aumentar la velocidad", "No detenerse", "Adelantar"], r: "a" },
+{ p: "¿Qué significa una luz amarilla fija en un semáforo?", opciones: ["Avanzar rápidamente", "Detenerse si es seguro hacerlo", "Girar a la izquierda", "Avanzar siempre"], r: "b" },
+{ p: "¿Qué indica una señal de prohibido girar a la izquierda?", opciones: ["Prohibición de giro a la izquierda", "Giro obligatorio a la izquierda", "Ceda el paso a la izquierda", "Permitido girar a la izquierda"], r: "a" },
+{ p: "¿Qué tipo de extintor debe llevar un automóvil particular?", opciones: ["De agua", "De polvo químico triclase", "De espuma", "De CO₂"], r: "b" },
+{ p: "¿Qué medida preventiva reduce el riesgo de choque trasero?", opciones: ["Circular muy cerca del vehículo de adelante", "Mantener distancia de seguridad", "Circular pegado al costado", "Usar luces altas"], r: "b" },
+{ p: "¿Qué significa una luz azul intermitente en un vehículo?", opciones: ["Vehículo policial o de emergencia", "Vehículo averiado", "Vehículo lento", "Vehículo escolar"], r: "a" },
+{ p: "¿Qué distancia mínima debe mantenerse al seguir una ambulancia en servicio?", opciones: ["50 metros", "100 metros", "150 metros", "200 metros"], r: "b" },
+{ p: "¿Qué indica una señal circular de fondo azul y flecha blanca?", opciones: ["Información turística", "Dirección obligatoria", "Advertencia de peligro", "Estacionamiento prohibido"], r: "b" },
+
+{ p: "¿Qué medida debe tener el triángulo de emergencia?", opciones: ["10 cm", "20 cm", "30 cm", "50 cm"], r: "c" },
+{ p: "¿Qué tipo de vehículos deben utilizar casco sus conductores?", opciones: ["Bicicletas", "Motocicletas y ciclomotores", "Automóviles", "Tractores"], r: "b" },
+{ p: "¿Qué indica una señal que muestra una vía en subida?", opciones: ["Zona peligrosa", "Inicio de pendiente ascendente", "Fin de autopista", "Zona de curvas"], r: "b" },
+{ p: "¿Qué distancia mínima debe haber entre un vehículo detenido y un paso a nivel?", opciones: ["2 metros", "5 metros", "10 metros", "20 metros"], r: "c" },
+{ p: "¿Qué significa una señal con una cruz de San Andrés?", opciones: ["Cruce ferroviario", "Cruce de peatones", "Zona escolar", "Curvas peligrosas"], r: "a" },
+{ p: "¿Qué factor influye en la distancia de detención?", opciones: ["Peso del vehículo", "Condiciones del pavimento", "Velocidad de circulación", "Todas las anteriores"], r: "d" },
+{ p: "¿Qué sanción puede aplicarse por conducir alcoholizado?", opciones: ["Advertencia verbal", "Multa, inhabilitación y retención del vehículo", "Descuento en el seguro", "Entrega de puntos"], r: "b" },
+{ p: "¿Qué sistema ayuda a mantener la trayectoria en curvas?", opciones: ["ABS", "ESP", "ASR", "Airbag"], r: "b" },
+{ p: "¿Qué documento debe renovarse periódicamente para conducir?", opciones: ["Título de propiedad", "Cédula azul", "Licencia de conducir", "Seguro del automotor"], r: "c" },
+{ p: "¿Qué indica una señal de 'Zona de Hospital'?", opciones: ["Estacionamiento permitido", "Reducir velocidad y circular con precaución", "Fin de autopista", "Acceso exclusivo"], r: "b" },
+
+{ p: "¿Qué luces deben estar encendidas en rutas durante el día?", opciones: ["Posición", "Altas", "Bajas", "Intermitentes"], r: "c" },
+{ p: "¿Qué indica una línea blanca continua en el centro de la calzada?", opciones: ["Permitido girar", "Prohibido cruzarla", "Zona de estacionamiento", "Adelantamiento permitido"], r: "b" },
+{ p: "¿Qué se debe hacer antes de cambiar de carril?", opciones: ["Señalizar con suficiente antelación y verificar espejos", "Girar inmediatamente", "Acelerar", "Detener el vehículo"], r: "a" },
+{ p: "¿Qué indica una señal que representa un ciervo?", opciones: ["Zona de cría de ganado", "Zona de animales sueltos", "Zona de carga", "Zona escolar"], r: "b" },
+{ p: "¿Qué acción debe realizarse si una rueda sale del asfalto?", opciones: ["Frenar de golpe", "Sujetar firmemente el volante y volver progresivamente", "Acelerar bruscamente", "Detener el vehículo"], r: "b" },
+{ p: "¿Qué significa una línea amarilla discontinua?", opciones: ["Prohibido sobrepasar", "Permitido sobrepasar con precaución", "Prohibido estacionar", "Obligación de girar"], r: "b" },
+{ p: "¿Qué tipo de conducción debe practicarse para reducir riesgos?", opciones: ["Conducción temeraria", "Conducción defensiva", "Conducción agresiva", "Conducción en zigzag"], r: "b" },
+{ p: "¿Qué señal indica proximidad a un paso de peatones?", opciones: ["Rectángulo verde", "Triángulo rojo con figura de peatón", "Círculo azul", "Círculo rojo"], r: "b" },
+{ p: "¿Qué indica una señal de prohibido estacionar?", opciones: ["P de color azul", "E tachada con rojo", "Triángulo amarillo", "Cruz verde"], r: "b" },
+{ p: "¿Qué indica una luz roja en el tablero de instrumentos?", opciones: ["Advertencia de parada inmediata", "Información general", "Sistema de audio encendido", "Aire acondicionado funcionando"], r: "a" },
+{ p: "¿Qué significa que una vía sea de sentido único?", opciones: ["Se puede circular en ambos sentidos", "Solo se puede circular en una dirección", "Se permite estacionar en ambas manos", "Se debe circular en reversa"], r: "b" },
+{ p: "¿Qué representa una señal de fondo azul con un dibujo de teléfono?", opciones: ["Área de estacionamiento", "Estación de servicio", "Teléfono de emergencia", "Hospital cercano"], r: "c" },
+{ p: "¿Qué debe hacerse si se enciende la luz de freno en el tablero?", opciones: ["Ignorarla", "Controlar el nivel de líquido de frenos", "Acelerar", "Bajar la velocidad"], r: "b" },
+{ p: "¿Qué distancia debe mantenerse de la senda peatonal?", opciones: ["5 metros", "10 metros", "2 metros", "1 metro"], r: "a" },
+{ p: "¿Qué comportamiento es seguro en túneles?", opciones: ["Circular con luces apagadas", "Encender luces bajas y no detenerse", "Tocar bocina constantemente", "Acelerar"], r: "b" },
+{ p: "¿Qué significa un cartel que indica 'Atención – Cruce de camiones'?", opciones: ["Reducir velocidad y extremar precauciones", "Circular normalmente", "Acelerar para pasar rápido", "Estacionar"], r: "a" },
+{ p: "¿Qué elementos deben llevar las bicicletas?", opciones: ["Luces delanteras y traseras, y elementos reflectantes", "Solo bocina", "Solo casco", "Extintor"], r: "a" },
+{ p: "¿Qué indica una señal con un camión en bajada?", opciones: ["Zona escolar", "Zona de pendiente pronunciada", "Zona de obras", "Zona de control policial"], r: "b" },
+{ p: "¿Qué debe hacer un conductor si tiene sueño?", opciones: ["Tomar café", "Detenerse a descansar", "Abrir la ventana", "Subir el volumen de la música"], r: "b" },
+
+{ p: "¿Qué indica una señal de prohibido girar en U?", opciones: ["Giro permitido", "Sólo giro a la izquierda prohibido", "Prohibición de girar en U", "Obligación de girar"], r: "c" },
+{ p: "¿Qué distancia de visión debe garantizar un parabrisas limpio?", opciones: ["10 metros", "20 metros", "50 metros", "Más de 100 metros"], r: "d" },
+{ p: "¿Qué sanción corresponde a quien no usa cinturón de seguridad?", opciones: ["Advertencia verbal", "Multa", "Permiso especial", "Descuento en el seguro"], r: "b" },
+{ p: "¿Qué precaución debe tomarse en pavimento mojado?", opciones: ["Acelerar", "Reducir velocidad", "Circular por banquina", "No cambiar de carril"], r: "b" },
+{ p: "¿Qué indica una señal con un tractor?", opciones: ["Cruce de maquinaria agrícola", "Zona de estacionamiento", "Obras en construcción", "Paso de bicicletas"], r: "a" },
+{ p: "¿Qué debe hacerse en una zona de derrumbes?", opciones: ["Circular con extrema precaución", "Acelerar", "Estacionar", "Tocar bocina constantemente"], r: "a" },
+{ p: "¿Qué indica una luz amarilla intermitente en el tablero?", opciones: ["Alarma urgente", "Precaución o advertencia menor", "Sistema eléctrico apagado", "Sistema de radio encendido"], r: "b" },
+{ p: "¿Qué elementos de seguridad deben usarse en motocicletas?", opciones: ["Casco homologado y luces encendidas", "Sólo luces encendidas", "Sólo chaleco reflectante", "Sólo guantes"], r: "a" },
+{ p: "¿Qué distancia mínima debe mantenerse con un vehículo detenido en semáforo?", opciones: ["0,5 metros", "1 metro", "2 metros", "5 metros"], r: "c" },
+{ p: "¿Qué significa una línea transversal blanca gruesa en la calzada?", opciones: ["Detenerse antes de esa línea", "Avanzar sin detenerse", "Prohibido detenerse", "Giro obligatorio"], r: "a" },
+
+{ p: "¿Qué es la distancia de frenado?", opciones: ["Espacio recorrido mientras se reacciona", "Espacio que recorre el vehículo desde que se acciona el freno hasta detenerse", "Espacio total desde que se percibe un obstáculo", "Distancia de visibilidad"], r: "b" },
+{ p: "¿Qué tipo de luces deben utilizarse en zonas rurales sin alumbrado?", opciones: ["Bajas", "Altas", "Intermitentes", "Posición"], r: "b" },
+{ p: "¿Qué indica una luz verde intermitente en el tablero?", opciones: ["Frenos en mal estado", "Sistema de señalización activo", "Motor encendido", "Sistema de climatización"], r: "b" },
+{ p: "¿Qué acción es incorrecta en un adelantamiento?", opciones: ["Comprobar visibilidad y espacio", "Señalizar la maniobra", "Realizarla en curva o cruce", "Realizarla en recta"], r: "c" },
+{ p: "¿Qué significa una señal de fondo azul con figura de cama?", opciones: ["Área de hospital", "Área de descanso", "Zona de control policial", "Zona de derrumbes"], r: "b" },
+{ p: "¿Qué significa un cartel con un camión cruzado en diagonal?", opciones: ["Cruce de camiones", "Zona de estacionamiento", "Camiones estacionados", "Zona de detención obligatoria"], r: "a" },
+{ p: "¿Qué indica una señal de 'Animales Sueltos'?", opciones: ["Zona de ganado", "Zona escolar", "Zona industrial", "Zona urbana"], r: "a" },
+{ p: "¿Qué acción reduce el riesgo de atropellar a un peatón?", opciones: ["Circular a alta velocidad", "Prestar atención en cruces peatonales", "No frenar", "Ignorar semáforos"], r: "b" },
+{ p: "¿Qué elemento ayuda a estabilizar un vehículo en curva?", opciones: ["ABS", "ESP", "Sistema de audio", "Extintor"], r: "b" },
+{ p: "¿Qué sanción corresponde por cruzar con semáforo en rojo?", opciones: ["Advertencia", "Multa y posible inhabilitación", "Permiso especial", "Reducción de la multa"], r: "b" },
+
+{ p: "¿Qué debe hacerse si se observa agua sobre la calzada?", opciones: ["Acelerar", "Reducir velocidad", "Frenar de golpe", "Circular por banquina"], r: "b" },
+{ p: "¿Qué significa una luz de advertencia de motor encendida?", opciones: ["Nivel bajo de combustible", "Problema en el sistema de motor", "Sistema ABS activo", "Sistema de climatización encendido"], r: "b" },
+{ p: "¿Qué precaución debe tenerse al conducir en bajada?", opciones: ["Usar marchas bajas", "Usar freno de mano", "Acelerar para ganar estabilidad", "Apagar las luces"], r: "a" },
+{ p: "¿Qué se debe revisar periódicamente en un vehículo?", opciones: ["Sólo el nivel de combustible", "Sistema de frenos, neumáticos, luces y dirección", "Sistema de audio", "Sistema de entretenimiento"], r: "b" },
+{ p: "¿Qué indica una luz intermitente de advertencia de batería?", opciones: ["Batería baja o problemas de carga", "Combustible bajo", "Luces encendidas", "Sistema de climatización encendido"], r: "a" },
+{ p: "¿Qué debe hacerse si un vehículo de emergencia se aproxima con sirena?", opciones: ["Continuar normalmente", "Facilitar el paso inmediatamente", "Acelerar", "Detenerse en la vía"], r: "b" },
+{ p: "¿Qué indica una señal de 'Zona de Escuela'?", opciones: ["Prioridad para bicicletas", "Zona de baja velocidad y máxima atención", "Zona de aceleración", "Zona de estacionamiento"], r: "b" },
+{ p: "¿Qué debe hacerse si se pincha un neumático a alta velocidad?", opciones: ["Frenar bruscamente", "Sujetar el volante y frenar progresivamente", "Acelerar", "Circular por la banquina"], r: "b" },
+{ p: "¿Qué distancia debe mantenerse de un colectivo detenido en parada?", opciones: ["10 metros", "5 metros", "1 metro", "Depende de la calle"], r: "a" },
+{ p: "¿Qué luz debe usarse al estacionar de noche en vía pública?", opciones: ["Luces bajas", "Luces de posición", "Luces altas", "Balizas"], r: "b" },
+{ p: "¿Qué debe hacerse al circular por una zona de badenes?", opciones: ["Acelerar", "Reducir la velocidad", "Circular por la banquina", "Ignorar"], r: "b" },
+];
+
+window.onload = function() {
+    const form = document.getElementById('examen');
+    preguntas.forEach((q, idx) => {
+        const div = document.createElement('div');
+        div.className = 'pregunta';
+        let html = `<p>${idx + 1}. ${q.p}</p>`;
+        ['a', 'b', 'c', 'd'].forEach((letra, i) => {
+            html += `<label class='respuesta'><input type='radio' name='p${idx+1}' value='${letra}'> ${letra}) ${q.opciones[i]}</label>`;
+        });
+        div.innerHTML = html;
+        form.insertBefore(div, form.lastElementChild);
+    });
+};
+
+function corregir() {
+    let correctas = 0;
+    preguntas.forEach((q, idx) => {
+        const respuestas = document.getElementsByName('p' + (idx + 1));
+        respuestas.forEach(r => {
+            r.parentElement.classList.remove('correcta', 'incorrecta');
+            if (r.value === q.r) {
+                r.parentElement.classList.add('correcta');
+            }
+            if (r.checked && r.value !== q.r) {
+                r.parentElement.classList.add('incorrecta');
+            }
+        });
+        const seleccionada = document.querySelector(`input[name='p${idx+1}']:checked`);
+        if (seleccionada && seleccionada.value === q.r) correctas++;
+    });
+    alert(`Respondiste correctamente ${correctas} de ${preguntas.length} preguntas.\n` +
+          (correctas >= (preguntas.length - 9) ? "\u2705 ¡Aprobaste!" : "\u274C No aprobaste, seguí practicando!"));
+}
+</script>
+
+<button type="button" onclick="corregir()">Corregir Examen</button>
+
+</form>
+
+</body>
+</html>
